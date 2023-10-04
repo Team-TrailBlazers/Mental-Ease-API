@@ -1,5 +1,4 @@
 // Fuctory Functions
-
 export const handleValidationErrors = (error, res) => {
   res.status(400).json({
     error: error.details[0].message,
@@ -48,6 +47,6 @@ export const handleWrongCredentials = (res) => {
 
 export const handleUserExists = (res) => {
   res.status(409).json({
-    message: "User already exists.Choose a unique username or email.",
+    message: "User already exists with the same email.",
   });
 };
