@@ -64,11 +64,33 @@ export const registerUser = async (req, res) => {
 export const getAllUsers = async (req, res) => {
   const handler = async (req, res) => {
     let pool = await sql.connect(config.sql);
-    let result = await pool.request().query("SELECT * FROM Users");
+    let result = await pool.request().query("SELECT UserID, FirstName, LastName, EmailAddress, RegistrationDate, ProfilePicture, Role FROM Users");
     result.recordset.length > 0
       ? res.status(200).json(result.recordset)
       : res.status(404).json({ message: "No users found" });
     // res.json(result.recordset);
+  };
+  tryCatchWrapper(handler, req, res);
+};
+
+// Get Single User || GET REQUEST
+export const getSingleUser = async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    handleMissingParamsError(res);
+    return;
+  }
+  const handler = async (req, res) => {
+    let pool = await sql.connect(config.sql);
+    let result = await pool
+      .request()
+      .input("id", sql.Int, id)
+      .query(
+        "SELECT UserID, FirstName, LastName, EmailAddress, RegistrationDate, ProfilePicture, Role FROM Users WHERE UserID = @id"
+      );
+    result.recordset.length > 0
+      ? res.status(200).json(result.recordset[0])
+      : handleUserNotFound(res);
   };
   tryCatchWrapper(handler, req, res);
 };
@@ -119,11 +141,14 @@ export const updateUser = async (req, res) => {
     }
 
     // User exists, proceed with update
+
+    const hashedPassword = bcrypt.hashSync(Password, 10);
+
     const updateFields = [];
     if (FirstName) updateFields.push("FirstName = @FirstName");
     if (LastName) updateFields.push("LastName = @LastName");
     if (EmailAddress) updateFields.push("EmailAddress = @EmailAddress");
-    if (Password) updateFields.push("HashedPassword = @Password");
+    if (Password) updateFields.push("HashedPassword = @HashedPassword");
     if (ProfilePicture) updateFields.push("ProfilePicture = @ProfilePicture");
     if (Role !== undefined) updateFields.push("Role = @Role");
 
@@ -133,13 +158,15 @@ export const updateUser = async (req, res) => {
       WHERE UserID = @id
     `;
 
+    
+
     const updateResult = await pool
       .request()
       .input("id", sql.Int, id)
       .input("FirstName", sql.VarChar, FirstName)
       .input("LastName", sql.VarChar, LastName)
       .input("EmailAddress", sql.VarChar, EmailAddress)
-      .input("Password", sql.VarChar, Password)
+      .input("HashedPassword", sql.VarChar, hashedPassword)
       .input("ProfilePicture", sql.VarChar, ProfilePicture)
       .input("Role", sql.VarChar, Role)
       .query(updateQuery);
