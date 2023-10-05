@@ -90,8 +90,20 @@ export const updateUser = async (req, res) => {
       Role,
     } = req.body;
 
+    let pool = await sql.connect(config.sql);
+    // Check if the user exists before attempting to update
+    const userExists = await pool
+      .request()
+      .input("id", sql.Int, id)
+      .query("SELECT TOP 1 1 FROM Users WHERE UserID = @id");
+
+    if (userExists.recordset.length === 0) {
+      handleUserNotFound(res);
+      return;
+    }
+
+    // Check if all fields are empty
     if (
-      // Check if all fields are empty
       !FirstName &&
       !LastName &&
       !EmailAddress &&
@@ -103,18 +115,6 @@ export const updateUser = async (req, res) => {
         { details: [{ message: "At least one property must be updated" }] },
         res
       );
-      return;
-    }
-
-    let pool = await sql.connect(config.sql);
-    // Check if the user exists before attempting to update
-    const userExists = await pool
-      .request()
-      .input("id", sql.Int, id)
-      .query("SELECT TOP 1 1 FROM Users WHERE UserID = @id");
-
-    if (userExists.recordset.length === 0) {
-      handleUserNotFound(res);
       return;
     }
 
