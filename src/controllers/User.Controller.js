@@ -64,7 +64,11 @@ export const registerUser = async (req, res) => {
 export const getAllUsers = async (req, res) => {
   const handler = async (req, res) => {
     let pool = await sql.connect(config.sql);
-    let result = await pool.request().query("SELECT UserID, FirstName, LastName, EmailAddress, RegistrationDate, ProfilePicture, Role FROM Users");
+    let result = await pool
+      .request()
+      .query(
+        "SELECT UserID, FirstName, LastName, EmailAddress, RegistrationDate, ProfilePicture, Role FROM Users"
+      );
     result.recordset.length > 0
       ? res.status(200).json(result.recordset)
       : res.status(404).json({ message: "No users found" });
@@ -138,12 +142,30 @@ export const updateUser = async (req, res) => {
         res
       );
       return;
+    } else if (EmailAddress) {
+      const emailExistsQuery = `
+      DECLARE @innerId INT = @id;
+      SELECT TOP 1 1 FROM Users WHERE EmailAddress = @EmailAddress AND UserID != @innerId
+    `;
+
+      const emailExistsResult = await pool
+        .request()
+        .input("EmailAddress", sql.VarChar, EmailAddress)
+        .input("id", sql.Int, id)
+        .query(emailExistsQuery);
+
+      if (emailExistsResult.recordset.length > 0) {
+        // Email address is already in use by another user
+        handleValidationErrors(
+          { details: [{ message: "Email address is already in use" }] },
+          res
+        );
+        return;
+      }
     }
 
     // User exists, proceed with update
-
-    const hashedPassword = bcrypt.hashSync(Password, 10);
-
+    const hashedPassword = bcrypt.hashSync(Password, 10); // Hash the updated password
     const updateFields = [];
     if (FirstName) updateFields.push("FirstName = @FirstName");
     if (LastName) updateFields.push("LastName = @LastName");
@@ -157,8 +179,6 @@ export const updateUser = async (req, res) => {
         ${updateFields.join(", ")} 
       WHERE UserID = @id
     `;
-
-    
 
     const updateResult = await pool
       .request()
