@@ -15,8 +15,6 @@ import {
   handleUserExists,
   handleUserNotFound,
   tryCatchWrapper,
-  handleWrongCredentials,
-  handleInvalidUser,
 } from "./../factory/Factory.js";
 
 // user registration || POST REQUEST
@@ -50,7 +48,7 @@ export const registerUser = async (req, res) => {
         .input("EmailAddress", sql.VarChar, EmailAddress)
         .input("Password", sql.VarChar, hashedPassword)
         .query(
-          "INSERT INTO Users (FirstName, LastName, EmailAddress,RegistrationDate, HashedPassword) VALUES (@FirstName, @LastName, @EmailAddress,@RegistrationDate, @Password)"
+          "INSERT INTO Users (FirstName, LastName, EmailAddress, RegistrationDate, HashedPassword, IsTherapist) VALUES (@FirstName, @LastName, @EmailAddress, @RegistrationDate, @Password, 0)"
         );
       res.status(201).json({
         message: "User created successfully",
@@ -67,7 +65,7 @@ export const getAllUsers = async (req, res) => {
     let result = await pool
       .request()
       .query(
-        "SELECT UserID, FirstName, LastName, EmailAddress, RegistrationDate, ProfilePicture, Role FROM Users"
+        "SELECT UserID, FirstName, LastName, EmailAddress, RegistrationDate, ProfilePicture, Role, IsTherapist FROM Users"
       );
     result.recordset.length > 0
       ? res.status(200).json(result.recordset)
@@ -90,7 +88,7 @@ export const getSingleUser = async (req, res) => {
       .request()
       .input("id", sql.Int, id)
       .query(
-        "SELECT UserID, FirstName, LastName, EmailAddress, RegistrationDate, ProfilePicture, Role FROM Users WHERE UserID = @id"
+        "SELECT UserID, FirstName, LastName, EmailAddress, RegistrationDate, ProfilePicture, Role, IsTherapist FROM Users WHERE UserID = @id"
       );
     result.recordset.length > 0
       ? res.status(200).json(result.recordset[0])
@@ -165,14 +163,22 @@ export const updateUser = async (req, res) => {
     }
 
     // User exists, proceed with update
-    const hashedPassword = bcrypt.hashSync(Password, 10); // Hash the updated password
+    let hashedPassword;
+    if (Password) {
+      hashedPassword = bcrypt.hashSync(Password, 10); // Hash the updated password
+    }
     const updateFields = [];
     if (FirstName) updateFields.push("FirstName = @FirstName");
     if (LastName) updateFields.push("LastName = @LastName");
     if (EmailAddress) updateFields.push("EmailAddress = @EmailAddress");
     if (Password) updateFields.push("HashedPassword = @HashedPassword");
     if (ProfilePicture) updateFields.push("ProfilePicture = @ProfilePicture");
-    if (Role !== undefined) updateFields.push("Role = @Role");
+    if (Role !== undefined) {
+      updateFields.push("Role = @Role");
+      if (Role === "therapist") {
+        updateFields.push("IsTherapist = 1"); // Update IsTherapist to 1 when Role is updated to "therapist"
+      }
+    }
 
     const updateQuery = `
       UPDATE Users SET
@@ -195,7 +201,9 @@ export const updateUser = async (req, res) => {
       res.status(200).json({ message: "User updated successfully" });
     } else {
       // This is an edge case when the user exists but the update fails for some reason
-      handleServerError(res);
+      const errorMessage = "Failed to update user"; // Customize the error message as needed
+      const error = new Error(errorMessage);
+      handleServerError(error, res);
     }
   };
 

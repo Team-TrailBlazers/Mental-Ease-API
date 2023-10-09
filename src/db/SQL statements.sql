@@ -1,5 +1,5 @@
 -- Create Users Table
--- Drop table Users
+Drop table Users
 
 CREATE TABLE Users (
     UserID INT PRIMARY KEY IDENTITY(1,1),
@@ -12,9 +12,31 @@ CREATE TABLE Users (
     Role VARCHAR(20) CHECK (Role IN ('user', 'therapist', 'admin')) DEFAULT 'user'
 );
 
+--Add IsTherapist column to Users table
+ALTER TABLE Users ADD IsTherapist BIT DEFAULT 0;
 
+-- Create trigger to insert therapist into Therapists table when user is updated
+GO
+CREATE TRIGGER UpdateUserToTherapist
+ON Users
+AFTER UPDATE
+AS
+BEGIN
+  IF UPDATE(IsTherapist) AND EXISTS (SELECT * FROM inserted WHERE IsTherapist = 1)
+  BEGIN
+    INSERT INTO Therapists (FirstName, LastName, EmailAddress, HashedPassword, LicenseNumber, Specialization, Location, TreatmentApproach, ProfilePicture)
+    SELECT FirstName, LastName, EmailAddress, HashedPassword, NULL, NULL, NULL, NULL, NULL
+    FROM inserted
+    WHERE IsTherapist = 1
+      AND NOT EXISTS (SELECT * FROM Therapists WHERE EmailAddress = inserted.EmailAddress);
+  END
+END;
+GO
 
--- Drop table Therapists
+-- Update a user to be a therapist
+UPDATE Users SET IsTherapist = 1, Role = 'therapist' WHERE UserID = 3;
+
+Drop table Therapists
 -- Create Therapists Table
 CREATE TABLE Therapists (
     TherapistID INT PRIMARY KEY IDENTITY(1,1),
@@ -28,7 +50,7 @@ CREATE TABLE Therapists (
     TreatmentApproach VARCHAR(100),
     ProfilePicture VARCHAR(MAX)
 );
--- Drop table Appointments
+Drop table Appointments
 -- Create Appointments Table
 CREATE TABLE Appointments (
     AppointmentID INT PRIMARY KEY IDENTITY(1,1),
@@ -40,7 +62,7 @@ CREATE TABLE Appointments (
     FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE,
     FOREIGN KEY (TherapistID) REFERENCES Therapists(TherapistID) ON DELETE CASCADE
 );
--- Drop table ChatMessages
+Drop table ChatMessages
 -- Create ChatMessages Table
 CREATE TABLE ChatMessages (
     MessageID INT PRIMARY KEY IDENTITY(1,1),
@@ -51,7 +73,7 @@ CREATE TABLE ChatMessages (
     FOREIGN KEY (SenderID) REFERENCES Users(UserID) ON DELETE CASCADE,
     FOREIGN KEY (ReceiverID) REFERENCES Users(UserID) 
 );
--- Drop table Resources
+Drop table Resources
 -- Create Resources Table
 CREATE TABLE Resources (
     ResourceID INT PRIMARY KEY IDENTITY(1,1),
@@ -63,7 +85,7 @@ CREATE TABLE Resources (
     Timestamp DATETIME
 );
 
--- Drop table SupportGroups;
+Drop table SupportGroups;
 -- Create Support Groups Table
 CREATE TABLE SupportGroups (
     GroupID INT PRIMARY KEY IDENTITY(1,1),
@@ -71,7 +93,7 @@ CREATE TABLE SupportGroups (
     Description VARCHAR(MAX),
     Timestamp DATE
 );
--- Drop table GroupMembers
+Drop table GroupMembers
 -- Create Group Members Table
 CREATE TABLE GroupMembers (
     MemberID INT PRIMARY KEY IDENTITY(1,1),
@@ -81,7 +103,7 @@ CREATE TABLE GroupMembers (
     FOREIGN KEY (GroupID) REFERENCES SupportGroups(GroupID) ON DELETE CASCADE
 );
 
--- Drop table GroupChatMessages
+Drop table GroupChatMessages
 -- Create Group Chat Messages Table
 CREATE TABLE GroupChatMessages (
     MessageID INT PRIMARY KEY IDENTITY(1,1),
@@ -119,7 +141,7 @@ WHERE UserID = 2;
 --UPDATE
 UPDATE Users
 SET Role = 'admin'
-WHERE UserID = 6;
+WHERE UserID = 7;
 --DELETE
 DELETE FROM Users
 WHERE UserID = 2;
