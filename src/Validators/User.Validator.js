@@ -5,7 +5,7 @@ export const UserRegisterValidator = (user) => {
     FirstName: Joi.string().min(3).max(30).required(),
     LastName: Joi.string().min(3).max(30).required(),
     EmailAddress: Joi.string().email().required(),
-    Password: Joi.string().min(4).max(30).required(),
+    Password: Joi.string().min(4).max(20).required(),
     ConfirmPassword: Joi.ref("Password"),
   });
   return userValidationSchema.validate(user);
@@ -14,7 +14,7 @@ export const UserRegisterValidator = (user) => {
 export const userLoginValidator = (user) => {
   const userLoginValidationSchema = Joi.object({
     EmailAddress: Joi.string().email().required(),
-    Password: Joi.string().min(4).max(30).required(),
+    Password: Joi.string().min(4).max(20).required(),
   });
   return userLoginValidationSchema.validate(user);
 };

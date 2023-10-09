@@ -6,6 +6,7 @@ import {
   deleteUser,
 } from "../controllers/User.Controller.js";
 import { loginUser } from "../controllers/UserLogin.Controller.js";
+import { loginAdmin } from "../controllers/AdminLogin.Controller.js";
 
 const userRoutes = (app) => {
   app.route("/api/auth/register").post(registerUser);
@@ -16,6 +17,9 @@ const userRoutes = (app) => {
 
   // LOGIN USER || POST REQUEST
   app.route("/api/auth/login").post(loginUser);
+
+  // LOGIN ADMIN || POST REQUEST
+  app.route("/api/admin/login").post(loginAdmin);
 };
 
 export default userRoutes;
