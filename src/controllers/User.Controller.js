@@ -1,7 +1,6 @@
 import sql from "mssql";
 import config from "../db/config.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
 import {
   UserRegisterValidator,
@@ -200,9 +199,6 @@ export const updateUser = async (req, res) => {
     if (updateResult.rowsAffected[0] === 1) {
       res.status(200).json({ message: "User updated successfully" });
     } else {
-      // This is an edge case when the user exists but the update fails for some reason
-      const errorMessage = "Failed to update user"; // Customize the error message as needed
-      const error = new Error(errorMessage);
       handleServerError(error, res);
     }
   };

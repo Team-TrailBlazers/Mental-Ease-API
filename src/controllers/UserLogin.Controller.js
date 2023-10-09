@@ -26,9 +26,13 @@ export const loginUser = async (req, res) => {
       .input("EmailAddress", sql.VarChar, EmailAddress)
       .query("SELECT * FROM Users WHERE EmailAddress = @EmailAddress");
     const user = result.recordset[0];
-    if (!user) {
-      handleUserNotFound(res);
-    } else if (user.Role === "user") {
+      if (!user) {
+          handleUserNotFound(res);
+      } else if (user.Role !== "user") {
+          res.status(404).json({
+              message: " You are not a user",
+          });
+      } else {
       const validPassword = bcrypt.compareSync(Password, user.HashedPassword);
       if (!validPassword) {
         handleWrongCredentials(res);
