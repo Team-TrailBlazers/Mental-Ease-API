@@ -70,3 +70,23 @@ export const getAllAppointments = async (req, res) => {
   };
   tryCatchWrapper(handler, req, res);
 };
+
+// Get Single Appointment || GET REQUEST
+export const getSingleAppointment = async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    handleMissingParamsError(res);
+    return;
+  }
+  const handler = async (req, res) => {
+    let pool = await sql.connect(config.sql);
+    let result = await pool
+      .request()
+      .input("id", sql.Int, id)
+      .query("SELECT * FROM Appointments WHERE AppointmentID = @id");
+    result.recordset.length > 0
+      ? res.json(result.recordset)
+      : res.json({ message: "appointment not found" });
+  };
+  tryCatchWrapper(handler, req, res);
+};
