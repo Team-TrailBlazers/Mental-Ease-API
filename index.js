@@ -4,6 +4,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import { authMiddleware } from "./src/middlewares/Middlewares.js";
 import userRoutes from "./src/routes/User.Route.js";
+import appointmentRoutes from "./src/routes/Appointment.Route.js";
 
 const app = express();
 
@@ -18,6 +19,7 @@ authMiddleware(app);
 
 //routes
 userRoutes(app);
+appointmentRoutes(app);
 
 app.get("/", (req, res) => {
   res.send("Welcome to Mental Ease API😀");

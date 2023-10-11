@@ -33,9 +33,6 @@ BEGIN
 END;
 GO
 
--- Update a user to be a therapist
-UPDATE Users SET IsTherapist = 1, Role = 'therapist' WHERE UserID = 3;
-
 Drop table Therapists
 -- Create Therapists Table
 CREATE TABLE Therapists (
@@ -50,6 +47,9 @@ CREATE TABLE Therapists (
     TreatmentApproach VARCHAR(100),
     ProfilePicture VARCHAR(MAX)
 );
+
+-- DROP TRIGGER DeleteTherapist;
+select * from Appointments;
 Drop table Appointments
 -- Create Appointments Table
 CREATE TABLE Appointments (
@@ -58,10 +58,21 @@ CREATE TABLE Appointments (
     TherapistID INT,
     AppointmentDate DATE,
     AppointmentTime TIME,
+    Duration INT;
+    Price DECIMAL(10, 2),
+    MessageText VARCHAR(MAX),
     AppointmentStatus VARCHAR(20), -- 'scheduled', 'completed', 'canceled'
     FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE,
     FOREIGN KEY (TherapistID) REFERENCES Therapists(TherapistID) ON DELETE CASCADE
 );
+-- adding the MessageText
+ ALTER TABLE Appointments ADD MessageText VARCHAR(MAX);
+ALTER TABLE Appointments ADD Price DECIMAL(10, 2);
+ALTER TABLE Appointments ADD Duration INT; 
+
+
+
+
 Drop table ChatMessages
 -- Create ChatMessages Table
 CREATE TABLE ChatMessages (
@@ -168,11 +179,13 @@ WHERE TherapistID = 2;
 					--Appointments
 -- CRUD Functionality Appointments Table
 --CREATE/ INSERT
-INSERT INTO Appointments (UserID, TherapistID, AppointmentDate, AppointmentTime, AppointmentStatus)
-VALUES (1, 1, '2023-09-28', '10:00:00', 'scheduled');
+INSERT INTO Appointments (UserID, TherapistID, AppointmentDate, AppointmentTime, MessageText, AppointmentStatus)
+VALUES (14, 5, '2023-09-28', '10:00:00', 'I have a problem', 'scheduled');
 
 --READ
 SELECT * FROM Appointments;
+SELECT * FROM Therapists;
+SELECT * FROM Users;
 
 --UPDATE
 UPDATE Appointments
