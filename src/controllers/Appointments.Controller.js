@@ -90,3 +90,202 @@ export const getSingleAppointment = async (req, res) => {
   };
   tryCatchWrapper(handler, req, res);
 };
+
+//update appointment || PUT REQUEST
+// export const updateAppointment = async (req, res) => {
+//   const { id } = req.params;
+//   if (!id) {
+//     handleMissingParamsError(res);
+//     return;
+//   }
+//   const handler = async (req, res) => {
+//     const {
+//       UserID,
+//       TherapistID,
+//       AppointmentDate,
+//       AppointmentTime,
+//       Duration,
+//       Price,
+//       MessageText,
+//       Location,
+//       AppointmentStatus,
+//     } = req.body;
+//     let pool = await sql.connect(config.sql);
+
+//     // check if appointment exists
+//     const appointmenatExist = await pool
+//       .request()
+//       .input("id", sql.Int, id)
+//       .query("SELECT TOP 1 1 FROM Appointments WHERE AppointmentID = @id");
+
+//     if (appointmenatExist.recordset.length === 0) {
+//       res.status(404).json({
+//         message: "Appointment not found",
+//       });
+//       return;
+//     }
+
+//     if (
+//       !UserID &&
+//       !TherapistID &&
+//       !AppointmentDate &&
+//       !AppointmentTime &&
+//       !Duration &&
+//       !Price &&
+//       !MessageText &&
+//       !Location &&
+//       !AppointmentStatus
+//     ) {
+//       handleValidationErrors(
+//         { details: [{ message: "At least one property must be updated" }] },
+//         res
+//       );
+//       return;
+//     }
+
+//     // update appointment
+//     const updateFields = [];
+//     if (UserID) updateFields.push(`UserID = ${UserID}`);
+//     if (TherapistID) updateFields.push(`TherapistID = ${TherapistID}`);
+//     if (AppointmentDate)
+//       updateFields.push(`AppointmentDate = ${AppointmentDate}`);
+//     if (AppointmentTime)
+//       updateFields.push(`AppointmentTime = ${AppointmentTime}`);
+//     if (Duration) updateFields.push(`Duration = ${Duration}`);
+//     if (Price) updateFields.push(`Price = ${Price}`);
+//     if (MessageText) updateFields.push(`MessageText = ${MessageText}`);
+//     if (Location) updateFields.push(`Location = ${Location}`);
+//     if (AppointmentStatus)
+//       updateFields.push(`AppointmentStatus = ${AppointmentStatus}`);
+//     const updateQuery = `UPDATE Appointments SET ${updateFields.join(", ")} WHERE AppointmentID = @id`;
+
+//     const updatedResult = await pool.request().query(updateQuery);
+
+//     if (updatedResult.rowsAffected[0] === 1) {
+//       res.status(200).json({
+//         message: "Appointment updated successfully",
+//       });
+//     } else {
+//       handleServerError(error, res);
+//     }
+//   };
+//   tryCatchWrapper(handler, req, res);
+// };
+
+export const updateAppointment = async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    handleMissingParamsError(res);
+    return;
+  }
+  const handler = async (req, res) => {
+    const {
+      UserID,
+      TherapistID,
+      AppointmentDate,
+      AppointmentTime,
+      Duration,
+      Price,
+      MessageText,
+      Location,
+      AppointmentStatus,
+    } = req.body;
+    let pool = await sql.connect(config.sql);
+
+    // check if appointment exists
+    const appointmentExist = await pool
+      .request()
+      .input("id", sql.Int, id)
+      .query("SELECT TOP 1 1 FROM Appointments WHERE AppointmentID = @id");
+
+    if (appointmentExist.recordset.length === 0) {
+      res.status(404).json({
+        message: "Appointment not found",
+      });
+      return;
+    }
+
+    if (
+      !UserID &&
+      !TherapistID &&
+      !AppointmentDate &&
+      !AppointmentTime &&
+      !Duration &&
+      !Price &&
+      !MessageText &&
+      !Location &&
+      !AppointmentStatus
+    ) {
+      handleValidationErrors(
+        { details: [{ message: "At least one property must be updated" }] },
+        res
+      );
+      return;
+    }
+
+    // update appointment
+    const updateFields = [];
+    const params = {};
+    if (UserID) {
+      updateFields.push(`UserID = @UserID`);
+      params.UserID = sql.Int;
+    }
+    if (TherapistID) {
+      updateFields.push(`TherapistID = @TherapistID`);
+      params.TherapistID = sql.Int;
+    }
+    if (AppointmentDate) {
+      updateFields.push(`AppointmentDate = @AppointmentDate`);
+      params.AppointmentDate = sql.Date;
+    }
+    // if (AppointmentTime) {
+    //   updateFields.push(`AppointmentTime = @AppointmentTime`);
+    //   params.AppointmentTime = sql.TimeTime;
+    // }
+    if (AppointmentTime) {
+      updateFields.push(`AppointmentTime = @AppointmentTime`);
+      params.AppointmentTime = sql.VarChar;
+    }
+
+    if (Duration) {
+      updateFields.push(`Duration = @Duration`);
+      params.Duration = sql.Int;
+    }
+    if (Price) {
+      updateFields.push(`Price = @Price`);
+      params.Price = sql.Decimal;
+    }
+    if (MessageText) {
+      updateFields.push(`MessageText = @MessageText`);
+      params.MessageText = sql.VarChar;
+    }
+    if (Location) {
+      updateFields.push(`Location = @Location`);
+      params.Location = sql.VarChar;
+    }
+    if (AppointmentStatus) {
+      updateFields.push(`AppointmentStatus = @AppointmentStatus`);
+      params.AppointmentStatus = sql.VarChar;
+    }
+    const updateQuery = `UPDATE Appointments SET ${updateFields.join(
+      ", "
+    )} WHERE AppointmentID = @id`;
+
+    const request = pool.request();
+    for (const [key, value] of Object.entries(params)) {
+      request.input(key, value, req.body[key]);
+    }
+    request.input("id", sql.Int, id);
+
+    const updatedResult = await request.query(updateQuery);
+
+    if (updatedResult.rowsAffected[0] === 1) {
+      res.status(200).json({
+        message: "Appointment updated successfully",
+      });
+    } else {
+      handleServerError(error, res);
+    }
+  };
+  tryCatchWrapper(handler, req, res);
+};
