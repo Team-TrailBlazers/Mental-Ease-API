@@ -58,8 +58,9 @@ CREATE TABLE Appointments (
     TherapistID INT,
     AppointmentDate DATE,
     AppointmentTime TIME,
-    Duration INT;
+    Duration INT,
     Price DECIMAL(10, 2),
+    Location  VARCHAR(25),
     MessageText VARCHAR(MAX),
     AppointmentStatus VARCHAR(20), -- 'scheduled', 'completed', 'canceled'
     FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE,
@@ -69,6 +70,7 @@ CREATE TABLE Appointments (
  ALTER TABLE Appointments ADD MessageText VARCHAR(MAX);
 ALTER TABLE Appointments ADD Price DECIMAL(10, 2);
 ALTER TABLE Appointments ADD Duration INT; 
+ ALTER TABLE Appointments ADD Location  VARCHAR(25);
 
 
 
@@ -133,7 +135,6 @@ CREATE TABLE FAQ (
     Answer VARCHAR(MAX)
 );
 
-
 						--Users
 -- CRUD Functionality Users Table
 --CREATE/ INSERT
@@ -186,7 +187,8 @@ VALUES (14, 5, '2023-09-28', '10:00:00', 'I have a problem', 'scheduled');
 SELECT * FROM Appointments;
 SELECT * FROM Therapists;
 SELECT * FROM Users;
-
+SELECT * FROM Appointments WHERE AppointmentID = 7;
+SELECT TOP 1 1 FROM Appointments WHERE AppointmentID = 7;
 --UPDATE
 UPDATE Appointments
 SET AppointmentStatus = 'completed'
@@ -327,3 +329,5 @@ WHERE FAQID = 1;
 --DELETE
 DELETE FROM FAQ
 WHERE FAQID = 1
+
+
