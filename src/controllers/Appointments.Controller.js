@@ -92,86 +92,6 @@ export const getSingleAppointment = async (req, res) => {
 };
 
 //update appointment || PUT REQUEST
-// export const updateAppointment = async (req, res) => {
-//   const { id } = req.params;
-//   if (!id) {
-//     handleMissingParamsError(res);
-//     return;
-//   }
-//   const handler = async (req, res) => {
-//     const {
-//       UserID,
-//       TherapistID,
-//       AppointmentDate,
-//       AppointmentTime,
-//       Duration,
-//       Price,
-//       MessageText,
-//       Location,
-//       AppointmentStatus,
-//     } = req.body;
-//     let pool = await sql.connect(config.sql);
-
-//     // check if appointment exists
-//     const appointmenatExist = await pool
-//       .request()
-//       .input("id", sql.Int, id)
-//       .query("SELECT TOP 1 1 FROM Appointments WHERE AppointmentID = @id");
-
-//     if (appointmenatExist.recordset.length === 0) {
-//       res.status(404).json({
-//         message: "Appointment not found",
-//       });
-//       return;
-//     }
-
-//     if (
-//       !UserID &&
-//       !TherapistID &&
-//       !AppointmentDate &&
-//       !AppointmentTime &&
-//       !Duration &&
-//       !Price &&
-//       !MessageText &&
-//       !Location &&
-//       !AppointmentStatus
-//     ) {
-//       handleValidationErrors(
-//         { details: [{ message: "At least one property must be updated" }] },
-//         res
-//       );
-//       return;
-//     }
-
-//     // update appointment
-//     const updateFields = [];
-//     if (UserID) updateFields.push(`UserID = ${UserID}`);
-//     if (TherapistID) updateFields.push(`TherapistID = ${TherapistID}`);
-//     if (AppointmentDate)
-//       updateFields.push(`AppointmentDate = ${AppointmentDate}`);
-//     if (AppointmentTime)
-//       updateFields.push(`AppointmentTime = ${AppointmentTime}`);
-//     if (Duration) updateFields.push(`Duration = ${Duration}`);
-//     if (Price) updateFields.push(`Price = ${Price}`);
-//     if (MessageText) updateFields.push(`MessageText = ${MessageText}`);
-//     if (Location) updateFields.push(`Location = ${Location}`);
-//     if (AppointmentStatus)
-//       updateFields.push(`AppointmentStatus = ${AppointmentStatus}`);
-//     const updateQuery = `UPDATE Appointments SET ${updateFields.join(", ")} WHERE AppointmentID = @id`;
-
-//     const updatedResult = await pool.request().query(updateQuery);
-
-//     if (updatedResult.rowsAffected[0] === 1) {
-//       res.status(200).json({
-//         message: "Appointment updated successfully",
-//       });
-//     } else {
-//       handleServerError(error, res);
-//     }
-//   };
-//   tryCatchWrapper(handler, req, res);
-// };
-
 export const updateAppointment = async (req, res) => {
   const { id } = req.params;
   if (!id) {
@@ -282,6 +202,47 @@ export const updateAppointment = async (req, res) => {
     if (updatedResult.rowsAffected[0] === 1) {
       res.status(200).json({
         message: "Appointment updated successfully",
+      });
+    } else {
+      handleServerError(error, res);
+    }
+  };
+  tryCatchWrapper(handler, req, res);
+};
+
+
+//delete appointment || DELETE REQUEST
+export const deleteAppointment = async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    handleMissingParamsError(res);
+    return;
+  }
+  const handler = async (req, res) => {
+    let pool = await sql.connect(config.sql);
+
+    // check if appointment exists
+    const appointmentExist = await pool
+      .request()
+      .input("id", sql.Int, id)
+      .query("SELECT TOP 1 1 FROM Appointments WHERE AppointmentID = @id");
+
+    if (appointmentExist.recordset.length === 0) {
+      res.status(404).json({
+        message: "Appointment not found",
+      });
+      return;
+    }
+
+    // delete appointment
+    const deleteResult = await pool
+      .request()
+      .input("id", sql.Int, id)
+      .query("DELETE FROM Appointments WHERE AppointmentID = @id");
+
+    if (deleteResult.rowsAffected[0] === 1) {
+      res.status(200).json({
+        message: "Appointment deleted successfully",
       });
     } else {
       handleServerError(error, res);
