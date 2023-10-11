@@ -158,10 +158,6 @@ export const updateAppointment = async (req, res) => {
       updateFields.push(`AppointmentDate = @AppointmentDate`);
       params.AppointmentDate = sql.Date;
     }
-    // if (AppointmentTime) {
-    //   updateFields.push(`AppointmentTime = @AppointmentTime`);
-    //   params.AppointmentTime = sql.TimeTime;
-    // }
     if (AppointmentTime) {
       updateFields.push(`AppointmentTime = @AppointmentTime`);
       params.AppointmentTime = sql.VarChar;

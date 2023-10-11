@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 
 import {
   UserRegisterValidator,
-  userLoginValidator,
 } from "../Validators/User.Validator.js";
 
 import {
