@@ -21,7 +21,7 @@ export const makeAppointment = async (req, res) => {
       handleValidationErrors(error, res);
       return;
     }
-    // const { UserID } = req.user;
+
     const {
       UserID,
       TherapistID,
@@ -55,6 +55,18 @@ export const makeAppointment = async (req, res) => {
     res.status(201).json({
       message: "Appointment created successfully",
     });
+  };
+  tryCatchWrapper(handler, req, res);
+};
+
+// Get all Appointments || GET REQUEST
+export const getAllAppointments = async (req, res) => {
+  const handler = async (req, res) => {
+    let pool = await sql.connect(config.sql);
+    let result = await pool.request().query("SELECT * FROM Appointments");
+    result.recordset.length > 0
+      ? res.json(result.recordset)
+      : res.json({ message: "No appointments found" });
   };
   tryCatchWrapper(handler, req, res);
 };

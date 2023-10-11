@@ -69,7 +69,6 @@ export const getAllUsers = async (req, res) => {
     result.recordset.length > 0
       ? res.status(200).json(result.recordset)
       : res.status(404).json({ message: "No users found" });
-    // res.json(result.recordset);
   };
   tryCatchWrapper(handler, req, res);
 };
