@@ -1,18 +1,11 @@
 import stripe from "stripe";
 import config from "./../db/config.js";
 import sql from "mssql";
-import { handleValidationErrors, tryCatchWrapper } from "../factory/Factory.js";
-import { StripePaymentValidator } from "../Validators/StripePayment.Validator.js";
 
 const stripeInstance = stripe(config.stripe_secret_key);
 
 export const createCheckoutSession = async (req, res) => {
-  const handler = async (req, res) => {
-    const { error } = StripePaymentValidator(req.body);
-    if (error) {
-      handleValidationErrors(error, res);
-      return;
-    }
+  try {
     const clientAppointmentIDs = req.body.clientAppoinmentID;
     const pool = await sql.connect(config.sql);
 
@@ -54,12 +47,10 @@ export const createCheckoutSession = async (req, res) => {
       success_url: `${config.client}/success`,
       cancel_url: `${config.client}/`,
     });
-
-    if (session) {
-      res.status(200).json({ url: session.url });
-    } else {
-      res.status(500).json({ message: "Something went wrong" });
-    }
-  };
-  tryCatchWrapper(handler, req, res);
+    res.json({ url: session.url });
+    // console.log(session);
+  } catch (e) {
+    // console.log(e);
+    res.status(500).json({ error: e.message });
+  }
 };
