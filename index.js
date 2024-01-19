@@ -10,9 +10,7 @@ const app = express();
 
 //built inmiddleware
 app.use(
-  cors({
-    origin: config.client,
-  })
+  cors()
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
