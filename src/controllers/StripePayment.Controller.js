@@ -21,6 +21,7 @@ export const createCheckoutSession = async (req, res) => {
           );
 
         const appointment = result.recordset[0];
+        
         if (!appointment) {
           res.status(404).json({
             message: "Appointment not found",
