@@ -1,9 +1,59 @@
 import stripe from "stripe";
 import config from "./../db/config.js";
 import sql from "mssql";
-import { tryCatchWrapper } from "../factory/Factory.js";
+
+
+import {  
+  handleValidationErrors,
+  handleMissingParamsError,
+  handleServerError,
+  handleUserExists,
+  handleUserNotFound,
+  tryCatchWrapper, } from "../factory/Factory.js";
 
 const stripeInstance = stripe(config.stripe_secret_key);
+
+const bookAppointment = async (customer, data, req, res) => {
+  try {
+    const AppointArray = JSON.parse(customer.metadata.clientAppoinmentID);
+    const AppointmentID = AppointArray[0].id;
+    const UserID = JSON.parse(customer.metadata.UserID);
+
+    console.log("appointment " + AppointmentID);
+    console.log("user_id " + UserID);
+
+    // ({ AppointmentID, UserID } = req.body);
+
+   
+    let pool = await sql.connect(config.sql);
+    await pool
+      .request()
+      .input("AppointmentID", sql.Int, AppointmentID)
+      .input("UserID", sql.Int, UserID)
+      .query("UPDATE Appointments SET AppointmentStatus = 'booked' WHERE AppointmentID = @AppointmentID");
+
+    if (res) {
+      res.status(201).json({
+        message: "Appointment created successfully",
+      });
+    } 
+    // else {
+    //   console.error("Failed to create appointment: Response object is undefined");
+    // }
+  } catch (error) {
+    if (res) {
+      res.status(500).json({
+        message: "Failed to create appointment",
+        error: error.message,
+      });
+    } 
+    // else {
+    //   console.error("Failed to create appointment:", error.message);
+    // }
+  }
+};
+
+
 
 export const createCheckoutSession = async (req, res) => {
   const customer = await stripeInstance.customers.create({
@@ -103,8 +153,9 @@ export const webhookEvents = async (req, res) => {
       if (stripeInstance.customers.retrieve) {
         try {
           const customer = await stripeInstance.customers.retrieve(data.customer);
-          console.log("Customer: ", customer);
-          console.log("data: ", data);
+          // console.log("Customer: ", customer);
+          // console.log("data: ", data);
+          bookAppointment(customer, data)
         } catch (err) {
           console.log("Error retrieving customer: ", err.message);
         }

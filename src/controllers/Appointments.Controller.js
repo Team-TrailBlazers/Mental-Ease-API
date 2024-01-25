@@ -15,6 +15,7 @@ import {
 
 // createAppointment || POST REQUEST
 export const makeAppointment = async (req, res) => {
+
   const handler = async (req, res) => {
     const { error } = appointmentValidator(req.body);
     if (error) {
