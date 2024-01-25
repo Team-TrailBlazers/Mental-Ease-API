@@ -8,10 +8,11 @@ import appointmentRoutes from "./src/routes/Appointment.Route.js";
 import stripePaymentRoute from "./src/routes/StripePayment.Route.js";
 const app = express();
 
-//built inmiddleware
+//built in middleware
 app.use(
   cors()
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
