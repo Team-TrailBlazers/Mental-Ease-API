@@ -24,7 +24,6 @@ const bookAppointment = async (customer, data, req, res) => {
 
     // ({ AppointmentID, UserID } = req.body);
 
-   
     let pool = await sql.connect(config.sql);
     await pool
       .request()
@@ -54,7 +53,7 @@ const bookAppointment = async (customer, data, req, res) => {
 };
 
 
-
+//checkout session
 export const createCheckoutSession = async (req, res) => {
   const customer = await stripeInstance.customers.create({
     metadata: {
