@@ -12,6 +12,12 @@ CREATE TABLE Users (
     Role VARCHAR(20) CHECK (Role IN ('user', 'therapist', 'admin')) DEFAULT 'user'
 );
 
+-- Add ConfirmPassword column to the Users table
+ALTER TABLE Users
+ADD  ConfirmPassword VARCHAR(255);
+
+
+SELECT * from Users
 --Add IsTherapist column to Users table
 ALTER TABLE Users ADD IsTherapist BIT DEFAULT 0;
 
@@ -66,13 +72,13 @@ CREATE TABLE Appointments (
     FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE,
     FOREIGN KEY (TherapistID) REFERENCES Therapists(TherapistID) ON DELETE CASCADE
 );
+SELECT Price FROM Appointments WHERE AppointmentID =  10
+-- payment status 
 -- adding the MessageText
  ALTER TABLE Appointments ADD MessageText VARCHAR(MAX);
 ALTER TABLE Appointments ADD Price DECIMAL(10, 2);
 ALTER TABLE Appointments ADD Duration INT; 
  ALTER TABLE Appointments ADD Location  VARCHAR(25);
-
-
 
 
 Drop table ChatMessages
@@ -144,7 +150,6 @@ VALUES ('Bian', 'Kemboi', 'bkemboi590@gmail.com', 'pass123', GETDATE(), 'picture
 --READ
 SELECT * FROM Users;
 
-
 --UPDATE
 UPDATE Users
 SET FirstName = 'Ann', LastName = 'Wanjiru'
@@ -156,7 +161,7 @@ SET Role = 'admin'
 WHERE UserID = 7;
 --DELETE
 DELETE FROM Users
-WHERE UserID = 2;
+WHERE user_id = 17;
 
 
 						--Therapists
@@ -181,10 +186,11 @@ WHERE TherapistID = 2;
 -- CRUD Functionality Appointments Table
 --CREATE/ INSERT
 INSERT INTO Appointments (UserID, TherapistID, AppointmentDate, AppointmentTime, MessageText, AppointmentStatus)
-VALUES (14, 5, '2023-09-28', '10:00:00', 'I have a problem', 'scheduled');
+VALUES (15, 5, '2023-09-28', '10:00:00', 'I have a problem', 'scheduled');
 
 --READ
-SELECT * FROM Appointments;
+
+
 SELECT * FROM Therapists;
 SELECT * FROM Users;
 SELECT * FROM Appointments WHERE AppointmentID = 7;
@@ -192,7 +198,10 @@ SELECT TOP 1 1 FROM Appointments WHERE AppointmentID = 7;
 --UPDATE
 UPDATE Appointments
 SET AppointmentStatus = 'completed'
-WHERE AppointmentID = 1;
+
+UPDATE Appointments
+SET Price = 200
+WHERE AppointmentID = 11;
 
 --DELETE
 DELETE FROM Appointments
@@ -207,8 +216,6 @@ VALUES (1, 1, 'Hello, kemboi!', GETDATE());
 
 --READ
 SELECT * FROM ChatMessages;
-
-
 							
 --UPDATE
 UPDATE ChatMessages
