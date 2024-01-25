@@ -68,10 +68,7 @@ export const createCheckoutSession = async (req, res) => {
 
 
 
-
-
 //handle webhook events integration.
-
 let endpointSecret;
 //  endpointSecret= "whsec_f92c3adf007e1208809b7e64e464b28caace836c0777b4cafc1696720dc093e4";
 
