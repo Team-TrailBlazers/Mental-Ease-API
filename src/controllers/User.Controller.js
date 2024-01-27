@@ -49,7 +49,7 @@ export const registerUser = async (req, res) => {
           "INSERT INTO Users (FirstName, LastName, EmailAddress, RegistrationDate, HashedPassword, IsTherapist) VALUES (@FirstName, @LastName, @EmailAddress, @RegistrationDate, @Password, 0)"
         );
       res.status(201).json({
-        message: "User created successfully",
+        message: "Account created successfully",
       });
     }
   };
