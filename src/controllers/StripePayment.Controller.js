@@ -1,57 +1,9 @@
 import stripe from "stripe";
 import config from "./../db/config.js";
 import sql from "mssql";
-
-
-import {  
-  handleValidationErrors,
-  handleMissingParamsError,
-  handleServerError,
-  handleUserExists,
-  handleUserNotFound,
-  tryCatchWrapper, } from "../factory/Factory.js";
+import {tryCatchWrapper } from "../factory/Factory.js";
 
 const stripeInstance = stripe(config.stripe_secret_key);
-
-const bookAppointment = async (customer, data, req, res) => {
-  try {
-    const AppointArray = JSON.parse(customer.metadata.clientAppoinmentID);
-    const AppointmentID = AppointArray[0].id;
-    const UserID = JSON.parse(customer.metadata.UserID);
-
-    console.log("appointment " + AppointmentID);
-    console.log("user_id " + UserID);
-
-    // ({ AppointmentID, UserID } = req.body);
-
-    let pool = await sql.connect(config.sql);
-    await pool
-      .request()
-      .input("AppointmentID", sql.Int, AppointmentID)
-      .input("UserID", sql.Int, UserID)
-      .query("UPDATE Appointments SET AppointmentStatus = 'booked' WHERE AppointmentID = @AppointmentID");
-
-    if (res) {
-      res.status(201).json({
-        message: "Appointment created successfully",
-      });
-    } 
-    // else {
-    //   console.error("Failed to create appointment: Response object is undefined");
-    // }
-  } catch (error) {
-    if (res) {
-      res.status(500).json({
-        message: "Failed to create appointment",
-        error: error.message,
-      });
-    } 
-    // else {
-    //   console.error("Failed to create appointment:", error.message);
-    // }
-  }
-};
-
 
 //checkout session
 export const createCheckoutSession = async (req, res) => {
@@ -117,8 +69,8 @@ export const createCheckoutSession = async (req, res) => {
 };
 
 
+// webhook integration.
 
-//handle webhook events integration.
 let endpointSecret;
 //  endpointSecret= "whsec_f92c3adf007e1208809b7e64e464b28caace836c0777b4cafc1696720dc093e4";
 
@@ -170,3 +122,43 @@ export const webhookEvents = async (req, res) => {
 
   res.send().end();
 }
+
+
+const bookAppointment = async (customer, data, req, res) => {
+  try {
+    const AppointArray = JSON.parse(customer.metadata.clientAppoinmentID);
+    const AppointmentID = AppointArray[0].id;
+    const UserID = JSON.parse(customer.metadata.UserID);
+
+    console.log("appointment " + AppointmentID);
+    console.log("user_id " + UserID);
+
+    // ({ AppointmentID, UserID } = req.body);
+
+    let pool = await sql.connect(config.sql);
+    await pool
+      .request()
+      .input("AppointmentID", sql.Int, AppointmentID)
+      .input("UserID", sql.Int, UserID)
+      .query("UPDATE Appointments SET AppointmentStatus = 'booked' WHERE AppointmentID = @AppointmentID");
+
+    if (res) {
+      res.status(201).json({
+        message: "Appointment created successfully",
+      });
+    } 
+    // else {
+    //   console.error("Failed to create appointment: Response object is undefined");
+    // }
+  } catch (error) {
+    if (res) {
+      res.status(500).json({
+        message: "Failed to create appointment",
+        error: error.message,
+      });
+    } 
+    // else {
+    //   console.error("Failed to create appointment:", error.message);
+    // }
+  }
+};

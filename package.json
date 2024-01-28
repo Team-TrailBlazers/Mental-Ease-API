@@ -8,7 +8,7 @@
     "node": ">=18.16.0"
   },
   "scripts": {
-    "start": "npm start",
+    "start": "node index.js",
     "dev": "nodemon index.js"
   },
   "keywords": [],
