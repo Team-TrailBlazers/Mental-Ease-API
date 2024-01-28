@@ -9,9 +9,7 @@ import stripePaymentRoute from "./src/routes/StripePayment.Route.js";
 const app = express();
 
 //built in middleware
-app.use(
-  cors()
-);
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
