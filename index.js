@@ -31,6 +31,6 @@ app.get("/", (req, res) => {
 });
 
 //port
-app.listen(config.port, () => {
-  console.log(`Server running at ${config.url}`);
+app.listen(config.port || 3000, () => {
+  console.log(`Server running`);
 });

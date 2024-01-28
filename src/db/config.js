@@ -3,8 +3,8 @@ import assert from "assert";
 dotenv.config();
 
 const {
-  HOST_URL,
-  HOST,
+  // HOST_URL,
+  // HOST,
   PORT,
   SQL_SERVER,
   SQL_USER,
@@ -13,17 +13,17 @@ const {
   JWT_SECRET,
   MAIL_PASSWORD,
   STRIPE_SECRET_KEY,
-  CLIENT,
+  // CLIENT,
 } = process.env;
 
 assert(PORT, "PORT is required");
-assert(HOST, "HOST is required");
+// assert(HOST, "HOST is required");
 
 const config = {
   port: PORT,
-  host: HOST,
+  // host: HOST,
 
-  url: HOST_URL,
+  // url: HOST_URL,
   sql: {
     server: SQL_SERVER,
     user: SQL_USER,
@@ -37,7 +37,7 @@ const config = {
   jwt_secret: JWT_SECRET,
   mail_password: MAIL_PASSWORD,
   stripe_secret_key: STRIPE_SECRET_KEY,
-  client: CLIENT,
+  // client: CLIENT,
 };
 
 export default config;
