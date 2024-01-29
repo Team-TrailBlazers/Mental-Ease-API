@@ -13,7 +13,7 @@ const {
   JWT_SECRET,
   MAIL_PASSWORD,
   STRIPE_SECRET_KEY,
-  // CLIENT,
+  CLIENT,
 } = process.env;
 
 assert(PORT, "PORT is required");
@@ -37,7 +37,7 @@ const config = {
   jwt_secret: JWT_SECRET,
   mail_password: MAIL_PASSWORD,
   stripe_secret_key: STRIPE_SECRET_KEY,
-  // client: CLIENT,
+  client: CLIENT,
 };
 
 export default config;
