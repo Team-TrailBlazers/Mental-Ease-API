@@ -17,7 +17,7 @@ const {
   CLIENT,
 } = process.env;
 
-// assert(PORT, "PORT is required");
+assert(PORT, "PORT is required");
 // assert(HOST, "HOST is required");
 
 const config = {
