@@ -1,3 +1,7 @@
+CREATE DATABASE MentalEase;
+
+use MentalEase
+
 -- Create Users Table
 Drop table Users
 
