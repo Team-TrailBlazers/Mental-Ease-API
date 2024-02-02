@@ -6,6 +6,7 @@ import { authMiddleware } from "./src/middlewares/Middlewares.js";
 import userRoutes from "./src/routes/User.Route.js";
 import appointmentRoutes from "./src/routes/Appointment.Route.js";
 import stripePaymentRoute from "./src/routes/StripePayment.Route.js";
+import therapistRoutes from './src/routes/Therapist.Route.js';
 const app = express();
 
 //built in middleware
@@ -23,6 +24,7 @@ authMiddleware(app);
 userRoutes(app);
 appointmentRoutes(app);
 stripePaymentRoute(app);
+therapistRoutes(app);
 
 app.get("/", (req, res) => {
   res.send("Welcome to Mental Ease API😀");
