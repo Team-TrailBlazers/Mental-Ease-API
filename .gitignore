@@ -1,0 +1,11 @@
+/node_modules
+
+/build
+
+*.yml
+.json
+*.env
+
+*.log
+
+.env
