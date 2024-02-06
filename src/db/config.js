@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import assert from "assert";
 dotenv.config();
+console.log(process.env.PORT);
 
 const {
   // HOST_URL,

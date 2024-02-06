@@ -9,6 +9,7 @@ import userRoutes from "./src/routes/User.Route.js";
 import appointmentRoutes from "./src/routes/Appointment.Route.js";
 import stripePaymentRoute from "./src/routes/StripePayment.Route.js";
 import therapistRoutes from './src/routes/Therapist.Route.js';
+
 const app = express();
 
 //built in middleware
@@ -45,9 +46,7 @@ io.on("connection", (socket) => {
   });
 });
 
-// server.listen(8082, () => {
-//   console.log('Server listening on port 5000');
-// });
+
 // custom middleware
 authMiddleware(app);
 
@@ -57,10 +56,12 @@ appointmentRoutes(app);
 stripePaymentRoute(app);
 therapistRoutes(app);
 
-server.get("/", (req, res) => {
+app.get("/", (req, res) => {
   res.send("Welcome to Mental Ease API😀");
 });
 
+//port
 server.listen(config.port || 3000, () => {
   console.log(`Server running on port ${config.port}`);
 });
+

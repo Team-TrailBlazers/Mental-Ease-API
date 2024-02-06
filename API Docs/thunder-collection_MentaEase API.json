@@ -1,0 +1,396 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "MentaEase API",
+    "dateExported": "2024-01-25T05:17:36.030Z",
+    "version": "1.1",
+    "folders": [
+        {
+            "_id": "ef7bdeae-55c6-4306-a5a4-d259d6197ac4",
+            "name": "Auth",
+            "containerId": "",
+            "created": "2023-10-03T11:52:44.942Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "69d62044-6f88-41d3-b2cd-504fb28d402e",
+            "name": "Users CRUD",
+            "containerId": "",
+            "created": "2023-10-04T06:38:25.833Z",
+            "sortNum": 20000
+        },
+        {
+            "_id": "15a8a558-6f93-4642-8f83-77062edb2b1b",
+            "name": "Appointments",
+            "containerId": "",
+            "created": "2023-10-11T15:43:50.576Z",
+            "sortNum": 30000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "c320843f-e1cc-4eeb-b08a-609d27024ea1",
+            "colId": "87eced24-48f7-40b4-960d-6e979c7aa035",
+            "containerId": "ef7bdeae-55c6-4306-a5a4-d259d6197ac4",
+            "name": "Register User",
+            "url": "http://localhost:8081/api/auth/register",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-10-03T11:48:14.448Z",
+            "modified": "2024-01-18T16:38:15.374Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formencoded",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "FirstName",
+                        "value": "Brian"
+                    },
+                    {
+                        "name": "LastName",
+                        "value": "Kemboi"
+                    },
+                    {
+                        "name": "EmailAddress",
+                        "value": "bkemboi590@gmail.com"
+                    },
+                    {
+                        "name": "Password",
+                        "value": "pass123"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "9c77faa5-42d8-44fa-8af2-7f67d0b05886",
+            "colId": "87eced24-48f7-40b4-960d-6e979c7aa035",
+            "containerId": "ef7bdeae-55c6-4306-a5a4-d259d6197ac4",
+            "name": "Login User",
+            "url": "http://localhost:8081/api/auth/login",
+            "method": "POST",
+            "sortNum": 40000,
+            "created": "2023-10-03T11:53:01.368Z",
+            "modified": "2024-01-18T16:38:39.192Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formencoded",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "EmailAddress",
+                        "value": "bkemboi590@gmail.com"
+                    },
+                    {
+                        "name": "Password",
+                        "value": "pass123"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "578ddcdb-c9d7-4cb3-a28a-533e5d45f9cc",
+            "colId": "87eced24-48f7-40b4-960d-6e979c7aa035",
+            "containerId": "ef7bdeae-55c6-4306-a5a4-d259d6197ac4",
+            "name": "Login Admin",
+            "url": "http://localhost:8081/api/admin/login",
+            "method": "POST",
+            "sortNum": 50000,
+            "created": "2023-10-03T11:53:12.802Z",
+            "modified": "2023-10-09T06:29:01.225Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formencoded",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "EmailAddress",
+                        "value": "sarah@gmail.com"
+                    },
+                    {
+                        "name": "Password",
+                        "value": "pass123"
+                    },
+                    {
+                        "name": "EmailAddress",
+                        "value": "test@gmail.com",
+                        "isDisabled": true
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "2f058988-4dfb-41af-89f2-075521c041aa",
+            "colId": "87eced24-48f7-40b4-960d-6e979c7aa035",
+            "containerId": "ef7bdeae-55c6-4306-a5a4-d259d6197ac4",
+            "name": "Login Therapist",
+            "url": "http://localhost:8081/api/therapist/login",
+            "method": "POST",
+            "sortNum": 60000,
+            "created": "2023-10-03T11:53:30.630Z",
+            "modified": "2023-10-09T05:31:11.061Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formencoded",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "EmailAddress",
+                        "value": "therapist@gmail.com"
+                    },
+                    {
+                        "name": "Password",
+                        "value": "pass123"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "b4f52e67-ed96-4f72-8a2d-deb32807af27",
+            "colId": "87eced24-48f7-40b4-960d-6e979c7aa035",
+            "containerId": "69d62044-6f88-41d3-b2cd-504fb28d402e",
+            "name": "All Users",
+            "url": "http://localhost:8081/api/users",
+            "method": "GET",
+            "sortNum": 70000,
+            "created": "2023-10-04T06:38:49.675Z",
+            "modified": "2023-10-04T06:40:44.308Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "9d3e4db7-cfc4-4e58-b073-6f29b63d75f9",
+            "colId": "87eced24-48f7-40b4-960d-6e979c7aa035",
+            "containerId": "69d62044-6f88-41d3-b2cd-504fb28d402e",
+            "name": "Single User",
+            "url": "http://localhost:8081/api/user/13",
+            "method": "GET",
+            "sortNum": 75000,
+            "created": "2023-10-05T05:34:36.387Z",
+            "modified": "2023-10-09T05:20:33.469Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "b96385d4-d042-4657-bddc-65006bc6814f",
+            "colId": "87eced24-48f7-40b4-960d-6e979c7aa035",
+            "containerId": "69d62044-6f88-41d3-b2cd-504fb28d402e",
+            "name": "Delete User",
+            "url": "http://localhost:8081/api/users/9",
+            "method": "DELETE",
+            "sortNum": 80000,
+            "created": "2023-10-04T06:51:24.959Z",
+            "modified": "2024-01-18T16:39:58.527Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "12ea0e90-b16f-47c0-b704-91f3f7975240",
+            "colId": "87eced24-48f7-40b4-960d-6e979c7aa035",
+            "containerId": "69d62044-6f88-41d3-b2cd-504fb28d402e",
+            "name": "Update User",
+            "url": "http://localhost:8081/api/users/14",
+            "method": "PATCH",
+            "sortNum": 90000,
+            "created": "2023-10-04T17:17:31.545Z",
+            "modified": "2023-10-09T06:38:36.838Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formencoded",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "FirstName",
+                        "value": "sarah"
+                    },
+                    {
+                        "name": "LastName",
+                        "value": "kiarie"
+                    },
+                    {
+                        "name": "EmailAddress",
+                        "value": "sarah@gmail.com"
+                    },
+                    {
+                        "name": "Password",
+                        "value": "pass123"
+                    },
+                    {
+                        "name": "Role",
+                        "value": "admin"
+                    },
+                    {
+                        "name": "ProfilePicture",
+                        "value": "url pic"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "8c406f96-3bfa-4726-bc4d-bac0724888f4",
+            "colId": "87eced24-48f7-40b4-960d-6e979c7aa035",
+            "containerId": "15a8a558-6f93-4642-8f83-77062edb2b1b",
+            "name": "Make Appoinment",
+            "url": "http://localhost:8081/api/appointment",
+            "method": "POST",
+            "sortNum": 100000,
+            "created": "2023-10-11T15:44:12.852Z",
+            "modified": "2023-10-11T21:13:18.971Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formencoded",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "UserID",
+                        "value": "9"
+                    },
+                    {
+                        "name": "TherapistID",
+                        "value": "5"
+                    },
+                    {
+                        "name": "AppointmentDate",
+                        "value": " '2023-09-28'"
+                    },
+                    {
+                        "name": "Duration",
+                        "value": "360"
+                    },
+                    {
+                        "name": "Price",
+                        "value": "100.00"
+                    },
+                    {
+                        "name": "MessageText",
+                        "value": "I have a challenge"
+                    },
+                    {
+                        "name": "Location",
+                        "value": "online"
+                    },
+                    {
+                        "name": "AppointmentStatus",
+                        "value": "scheduled"
+                    },
+                    {
+                        "name": "AppointmentTime",
+                        "value": "13:45:00"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "02de12ab-eec9-473e-9707-5faf9d625e20",
+            "colId": "87eced24-48f7-40b4-960d-6e979c7aa035",
+            "containerId": "15a8a558-6f93-4642-8f83-77062edb2b1b",
+            "name": "Update Appoinment",
+            "url": "http://localhost:8081/api/appointment/10",
+            "method": "PATCH",
+            "sortNum": 102500,
+            "created": "2023-10-11T18:36:35.166Z",
+            "modified": "2023-10-11T21:29:06.484Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formencoded",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "UserID",
+                        "value": "11"
+                    },
+                    {
+                        "name": "TherapistID",
+                        "value": "4"
+                    },
+                    {
+                        "name": "AppointmentDate",
+                        "value": "2023-09-28"
+                    },
+                    {
+                        "name": "Duration",
+                        "value": "3609"
+                    },
+                    {
+                        "name": "Price",
+                        "value": "140.00"
+                    },
+                    {
+                        "name": "MessageText",
+                        "value": "have a mental challenge"
+                    },
+                    {
+                        "name": "Location",
+                        "value": "physical"
+                    },
+                    {
+                        "name": "AppointmentStatus",
+                        "value": "completed"
+                    },
+                    {
+                        "name": "AppointmentTime",
+                        "value": "09:45:00"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "ce8a4332-3ac9-4245-9e28-74982df99678",
+            "colId": "87eced24-48f7-40b4-960d-6e979c7aa035",
+            "containerId": "15a8a558-6f93-4642-8f83-77062edb2b1b",
+            "name": "Single Appoinment",
+            "url": "http://localhost:8081/api/appointment/10",
+            "method": "GET",
+            "sortNum": 105000,
+            "created": "2023-10-11T16:44:15.844Z",
+            "modified": "2023-10-11T21:25:26.159Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "46c0c37f-b1c4-44ca-9533-4edd2ddef2cd",
+            "colId": "87eced24-48f7-40b4-960d-6e979c7aa035",
+            "containerId": "15a8a558-6f93-4642-8f83-77062edb2b1b",
+            "name": "Delete Appoinment ",
+            "url": "http://localhost:8081/api/appointment/9",
+            "method": "DELETE",
+            "sortNum": 107500,
+            "created": "2023-10-11T21:22:37.023Z",
+            "modified": "2023-10-11T21:24:46.445Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "a2693ad7-712a-4f03-be03-d0bc3c4d16ca",
+            "colId": "87eced24-48f7-40b4-960d-6e979c7aa035",
+            "containerId": "15a8a558-6f93-4642-8f83-77062edb2b1b",
+            "name": "ALL Appoinments",
+            "url": "http://localhost:8081/api/appointments",
+            "method": "GET",
+            "sortNum": 110000,
+            "created": "2023-10-11T16:32:45.227Z",
+            "modified": "2023-10-11T16:33:58.176Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ]
+}

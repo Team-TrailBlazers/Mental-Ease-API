@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+CREATE DATABASE MentalEase;
+
+use MentalEase
+
+>>>>>>> origin/Freshia
 -- Create Users Table
 Drop table Users
 

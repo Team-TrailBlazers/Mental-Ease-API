@@ -67,7 +67,7 @@ export const getAllTherapists = async (req, res) => {
     let result = await pool
       .request()
       .query(
-        "SELECT TherapistID, FirstName, LastName, EmailAddress, LicenseNumber, ProfilePicture, Location, Specialization, TreatmentApproach FROM Therapists"
+        "SELECT TherapistID, FirstName, LastName, EmailAddress, RegistrationDate, ProfilePicture, Role FROM Therapists"
       );
     result.recordset.length > 0
       ? res.status(200).json(result.recordset)
