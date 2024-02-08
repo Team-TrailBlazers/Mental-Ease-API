@@ -1,3 +1,4 @@
+import express from "express";
 import { 
 	registerTherapist,
 	getAllTherapists,
@@ -6,9 +7,17 @@ import {
 	deleteTherapist,
 } from "../controllers/Therapist.Controller.js";
 
-const therapistRoutes = (app) => {
-	app.route("/api/therapist").post(registerTherapist).get(getAllTherapists);
-	app.route("/api/therapist/:id").get(getSingleTherapist).patch(updateTherapist).delete(deleteTherapist);
-};
+const router = express.Router();
 
-export default therapistRoutes;
+router
+	.route("/")
+	.post(registerTherapist)
+	.get(getAllTherapists);
+
+router
+	.route("/:id")
+	.get(getSingleTherapist)
+	.patch(updateTherapist)
+	.delete(deleteTherapist);
+
+export default router;

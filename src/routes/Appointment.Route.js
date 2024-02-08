@@ -1,18 +1,24 @@
+import express from "express";
 import {
     deleteAppointment,
-  getAllAppointments,
-  getSingleAppointment,
-  makeAppointment,
-  updateAppointment,
+    getAllAppointments,
+    getSingleAppointment,
+    makeAppointment,
+    updateAppointment,
 } from "../controllers/Appointments.Controller.js";
 
-const appointmentRoutes = (app) => {
-  app.route("/api/appointment").post(makeAppointment);
-  app.route("/api/appointment/:id").get(getSingleAppointment);
-  app.route("/api/appointments").get(getAllAppointments);
-    app.route("/api/appointment/:id").patch(updateAppointment);
-    // delete appointment || DELETE REQUEST
-    app.route("/api/appointment/:id").delete(deleteAppointment);
-};
+const router = express.Router();
 
-export default appointmentRoutes;
+router
+    .route("/")
+    .post(makeAppointment)
+    .get(getAllAppointments);
+
+router
+    .route("/:id")
+    .get(getSingleAppointment)
+    .patch(updateAppointment)
+    .delete(deleteAppointment);
+
+
+export default router;
