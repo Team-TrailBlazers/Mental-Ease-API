@@ -3,12 +3,10 @@ import config from "./src/db/config.js";
 import cors from "cors";
 import bodyParser from "body-parser";
 import http from 'http';
+import morgan from "morgan";
 import { Server } from 'socket.io';
 import { authMiddleware } from "./src/middlewares/Middlewares.js";
-import userRoutes from "./src/routes/User.Route.js";
-import appointmentRoutes from "./src/routes/Appointment.Route.js";
-import stripePaymentRoute from "./src/routes/StripePayment.Route.js";
-import therapistRoutes from './src/routes/Therapist.Route.js';
+import routes from "./src/routes/index.js";
 
 const app = express();
 
@@ -41,15 +39,13 @@ io.on("connection", (socket) => {
   });
 });
 
-
 // custom middleware
 authMiddleware(app);
 
+app.use(morgan("dev"));
+
 //routes
-userRoutes(app);
-appointmentRoutes(app);
-stripePaymentRoute(app);
-therapistRoutes(app);
+app.use("/api", routes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to Mental Ease API😀");
